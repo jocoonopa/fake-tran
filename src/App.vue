@@ -14,11 +14,18 @@
                     <div class="card-body" >
                         <h5 class="card-title">對話</h5>
                         <p class="card-text">
-                            <div style="height: 300px; overflow:scroll;">
-                                <p :key="index" v-for="(dialog, index) in presents">
-                                    {{ dialog.text }}
-                                </p>
+                            <div>
+                                <b-tabs content-class="mt-3">
+                                    <b-tab title="對話" active>
+                                        <div style="height: 300px; overflow:scroll;">
+                                            <Bubble :message="dialog" :key="index" v-for="(dialog, index) in presents"></Bubble>
+                                        </div>
+                                    </b-tab>
+                                    <b-tab title="小結"><p>I'm the second tab content</p></b-tab>
+                                    <b-tab title="其他"><p>Disabled tab!</p></b-tab>
+                                </b-tabs>
                             </div>
+                            
                         </p>
                     </div>
                 </div>
@@ -49,10 +56,15 @@
 <script>
 
 import _ from 'lodash'
+import BootstrapVue from 'bootstrap-vue'
 import DialogCollection from './dialog-collection.js'
+import Bubble from './components/Bubble.vue'
 
 export default {
     name: 'app',
+    components: {
+        Bubble,
+    },
     data() {
         return {
             title: 'Hello world',
