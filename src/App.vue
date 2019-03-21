@@ -4,18 +4,22 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Card 1</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title">情緒</h5>
+                        <p class="card-text" v-html="emotion"></p>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Card 2</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-danger">Go somewhere</a>
+                    <div class="card-body" >
+                        <h5 class="card-title">對話</h5>
+                        <p class="card-text">
+                            <div style="height: 300px; overflow:scroll;">
+                                <p :key="index" v-for="(dialog, index) in presents">
+                                    {{ dialog.text }}
+                                </p>
+                            </div>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -25,18 +29,16 @@
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Card 3</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-info">Go somewhere</a>
+                        <h5 class="card-title">流程</h5>
+                        <p class="card-text" v-html="flow"></p>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Card 4</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-warning">Go somewhere</a>
+                        <h5 class="card-title">知識點</h5>
+                        <p class="card-text" v-html="kb"></p>
                     </div>
                 </div>
             </div>
@@ -46,9 +48,56 @@
 
 <script>
 
+import _ from 'lodash'
+import DialogCollection from './dialog-collection.js'
+
 export default {
     name: 'app',
-    components: {
+    data() {
+        return {
+            title: 'Hello world',
+            source: DialogCollection,
+            presents: [],
+            emotion: null,
+            kb: null,
+            flow: null,
+        }
+    },
+
+    computed: {
+
+    },
+
+    methods: {
+        process(index = 0) {
+            if (_.gte(index, this.source.length)) {
+                return
+            }
+
+            let mixData = this.source[index]
+
+            this.presents.push(mixData.dialog)
+
+            if (! _.isEmpty(mixData.kb)) {
+                this.kb = mixData.kb
+            }
+
+            if (! _.isEmpty(mixData.flow)) {
+                this.flow = mixData.flow
+            }
+
+            if (! _.isEmpty(mixData.emotion)) {
+                this.emotion = mixData.emotion
+            }
+
+            return setTimeout(() => {
+                return this.process((index + 1))
+            }, _.isEmpty(mixData.dialog.delay) ? 1500 : mixData.dialog.delay)
+        }
+    },
+
+    mounted() {
+        this.process(0)
     },
 }
 </script>
