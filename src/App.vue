@@ -1,6 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
+
             <div class="col">
                 <div class="card">
                     <div class="card-body">
@@ -9,6 +10,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col">
                 <div class="card">
                     <div class="card-body" >
@@ -16,23 +18,32 @@
                         <p class="card-text">
                             <div>
                                 <b-tabs content-class="mt-3">
+
                                     <b-tab title="對話" active>
-                                        <div style="height: 300px; overflow:scroll;">
+                                        <div id="dialog-frame" style="height: 300px; overflow: scroll;">
                                             <Bubble :message="dialog" :key="index" v-for="(dialog, index) in presents"></Bubble>
                                         </div>
                                     </b-tab>
-                                    <b-tab title="小結"><p>I'm the second tab content</p></b-tab>
-                                    <b-tab title="其他"><p>Disabled tab!</p></b-tab>
+                                    
+                                    <b-tab title="小結">
+                                        <p>I'm the second tab content</p>
+                                    </b-tab>
+                                    
+                                    <b-tab title="其他">
+                                        <p>Disabled tab!</p>
+                                    </b-tab>
+                                    
                                 </b-tabs>
                             </div>
-                            
                         </p>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="row">
+
             <div class="col">
                 <div class="card">
                     <div class="card-body">
@@ -41,6 +52,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col">
                 <div class="card">
                     <div class="card-body">
@@ -49,6 +61,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -76,10 +89,6 @@ export default {
         }
     },
 
-    computed: {
-
-    },
-
     methods: {
         process(index = 0) {
             if (_.gte(index, this.source.length)) {
@@ -102,25 +111,34 @@ export default {
                 this.emotion = mixData.emotion
             }
 
+            this.scrollToBottom()
+
             return setTimeout(() => {
                 return this.process((index + 1))
-            }, _.isEmpty(mixData.dialog.delay) ? 1500 : mixData.dialog.delay)
-        }
+            }, _.isEmpty(mixData.dialog.delay) ? mixData.dialog.text.length * (1000 * 0.4) : mixData.dialog.delay)
+        },
+
+        scrollToBottom() {
+            var container = this.$el.querySelector('#dialog-frame')
+            
+            setTimeout(() => container.scrollTop = container.scrollHeight, 300)
+        },
     },
 
     mounted() {
         this.process(0)
     },
 }
+
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
 }
 </style>
